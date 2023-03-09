@@ -10,15 +10,15 @@ export default function Post({ _id, title, summary, createdAt, author }) {
         </Link>
       </div> */}
       <div className="texts">
-        <Link to={`/post/${_id}`}>
-          <h2>{title}</h2>
+        <Link to={`/edit/${_id}`}>
+          <h2>{typeof title}</h2>
         </Link>
-        <Link to={`/post/${_id}`}>
-          <h2>{summary}</h2>
+        <Link to={`/edit/${_id}`}>
+          <h2>{typeof summary}</h2>
         </Link>
         <p className="info">
-          <Link to={`/post/${_id}`}>
-            <a className="author">{author.username}</a>
+          <Link to={`/edit/${_id}`} className="author">
+            {author.username}
           </Link>
           <time>{formatISO9075(new Date(createdAt))}</time>
         </p>

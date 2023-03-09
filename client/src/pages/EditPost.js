@@ -38,26 +38,17 @@ export default function EditPost() {
     }
   }
 
+  // もしメインページに戻りたい場合setRedirectと一緒に使用
   if (redirect) {
     return <Navigate to={"/post/" + id} />;
   }
 
-  // const handleRecord = (e) => {
-  //   e.preventDefault();
-  //   setPreviousPosts([...previousPosts, { title, summary }]);
-  //   setTitle("");
-  //   setSummary("");
-  // };
-
-  function handleRecord(ev) {
-    ev.preventDefault();
-    // Just use the line below
-    // setPreviousPosts([...previousPosts, { title, summary }]);
-
-    // setTitle("");
-    // setSummary("");
-    // console.log(title);
-    const newPost = { title, summary };
+  function handleRecord() {
+    const newPost = {
+      id: id,
+      title: title,
+      summary: summary,
+    };
     setPreviousPosts([...previousPosts, newPost]);
     localStorage.setItem(
       "previousPosts",
@@ -81,12 +72,18 @@ export default function EditPost() {
       />
       <button style={{ marginTop: "5px" }}>Make</button>
       <div style={{ marginTop: "60px" }}>
-        {previousPosts.map((post, index) => (
-          <div key={index} className="modeltexts" style={{ marginTop: "6px" }}>
-            <h3>{post.title}</h3>
-            <h3>{post.summary}</h3>
-          </div>
-        ))}
+        {previousPosts
+          .filter((post) => post.id === id)
+          .map((post, index) => (
+            <div
+              key={index}
+              className="modeltexts"
+              style={{ marginTop: "6px" }}
+            >
+              <h3>{post.title}</h3>
+              <h3>{post.summary}</h3>
+            </div>
+          ))}
       </div>
     </form>
   );

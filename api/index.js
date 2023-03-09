@@ -69,35 +69,7 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json("ok");
 });
 
-// app.post("/post", uploadMiddleware.single("file"), async (req, res) => {
-//   const { originalname, path } = req.file;
-//   const parts = originalname.split(".");
-//   const ext = parts[parts.length - 1];
-//   const newPath = path + "." + ext;
-//   fs.renameSync(path, newPath);
-
-//   const { token } = req.cookies;
-//   jwt.verify(token, secret, {}, async (err, info) => {
-//     if (err) throw err;
-//     const { title, summary, content } = req.body;
-//     const postDoc = await Post.create({
-//       title,
-//       summary,
-//       content,
-//       cover: newPath,
-//       author: info.id,
-//     });
-//     res.json(postDoc);
-//   });
-// });
-
 app.post("/post", uploadMiddleware.single("file"), async (req, res) => {
-  // const { originalname, path } = req.file;
-  // const parts = originalname.split(".");
-  // const ext = parts[parts.length - 1];
-  // const newPath = path + "." + ext;
-  // fs.renameSync(path, newPath);
-
   // Numberだと0に置き換える
   if (
     typeof req.body.title === "string" &&
@@ -126,36 +98,6 @@ app.post("/post", uploadMiddleware.single("file"), async (req, res) => {
   });
 });
 
-// app.put("/post", uploadMiddleware.single("file"), async (req, res) => {
-//   let newPath = null;
-//   if (req.file) {
-//     const { originalname, path } = req.file;
-//     const parts = originalname.split(".");
-//     const ext = parts[parts.length - 1];
-//     newPath = path + "." + ext;
-//     fs.renameSync(path, newPath);
-//   }
-
-//   const { token } = req.cookies;
-//   jwt.verify(token, secret, {}, async (err, info) => {
-//     if (err) throw err;
-//     const { id, title, summary, content } = req.body;
-//     const postDoc = await Post.findById(id);
-//     const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id);
-//     if (!isAuthor) {
-//       return res.status(400).json("you are not the author");
-//     }
-//     await postDoc.update({
-//       title,
-//       summary,
-//       content,
-//       cover: newPath ? newPath : postDoc.cover,
-//     });
-
-//     res.json(postDoc);
-//   });
-// });
-
 // Edit
 app.put("/post", uploadMiddleware.single("file"), async (req, res) => {
   const { token } = req.cookies;
@@ -168,17 +110,17 @@ app.put("/post", uploadMiddleware.single("file"), async (req, res) => {
       return res.status(400).json("you are not the author");
     }
     // データの型をチェックして、変更できない場合はエラーを返す
-    // if (title === "Text" && typeof postDoc.title === "number") {
+    // if (typeof title === "string" && typeof postDoc.title === "number") {
     //   return res.status(400).json("Cannot change String to Number");
     // }
-    // if (summary === "Text" && typeof postDoc.summary === "number") {
+    // if (typeof summary === "string" && typeof postDoc.summary === "number") {
     //   return res.status(400).json("Cannot change String to Number");
     // }
-    // if (typeof title === 0 && postDoc.title === "Text") {
-    //   return res.status(400).json("Cannot change String to Number");
+    // if (typeof title === "number" && typeof postDoc.title === "string") {
+    //   return res.status(400).json("Cannot change Number to String");
     // }
-    // if (typeof summary === 0 && postDoc.summary === "Text") {
-    //   return res.status(400).json("Cannot change String to Number");
+    // if (typeof summary === "number" && typeof postDoc.summary === "string") {
+    //   return res.status(400).json("Cannot change Number to String");
     // }
     await postDoc.update({
       title,
@@ -210,5 +152,3 @@ app.listen(4000);
 // 386RsbGTlJ987u5i
 // Mongo connection
 // mongodb+srv://nakanishikatsu0804:386RsbGTlJ987u5i@cluster0.on9zjah.mongodb.net/?retryWrites=true&w=majority
-
-// summaryの型を見る // typeof()
